@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BeatMiles</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body onload="checkAuth()">
+    <nav>
+        <a href="index.html">Home</a>
+        <a href="workout_log.html">Workout Log</a>
+        <a href="login.html" id="login-link">Login</a>
+        <a href="register.html" id="register-link">Register</a>
+        <a href="#" id="logout-link" style="display: none;" onclick="logout()">Logout</a>
+    </nav>
+
+    <header>
+        <div class="header-container">
+            <img src="logo.png" alt="Team Logo" class="logo">
+            <div class="header-content">
+                <h1>BeatMiles</h1>
+                <p>Track your cardio workouts and monitor your progress</p>
+                <button id="hero-button" onclick="window.location.href='workout_log.html'">Log New Workout</button>
+            </div>
+        </div>
+    </header>
+
+
+    <script>
+        // Check for token in URL
+        const urlParams = new URLSearchParams(window.location.search);
+        const token = urlParams.get('token');
+        if (token) {
+            localStorage.setItem("token", token);
+            // Remove token from URL
+            window.history.replaceState({}, document.title, "/index.html");
+            alert("Login via third-party successful!");
+            window.location.reload();
+        }
+
+        function checkAuth() {
+            const token = localStorage.getItem("token");
+            const loginLink = document.getElementById("login-link");
+            const registerLink = document.getElementById("register-link");
+            const logoutLink = document.getElementById("logout-link");
+
+            if (token) {
+                loginLink.style.display = "none";
+                registerLink.style.display = "none";
+                logoutLink.style.display = "inline";
+            } else {
+                loginLink.style.display = "inline";
+                registerLink.style.display = "inline";
+                logoutLink.style.display = "none";
+            }
+        }
+
+        function logout() {
+            localStorage.removeItem("token");
+            alert("You have been logged out.");
+            window.location.href = "index.html";
+        }
+    </script>
+    <script src="script.js"></script>
+</body>
+</html>
